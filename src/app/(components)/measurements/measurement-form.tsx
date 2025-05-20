@@ -104,7 +104,7 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Add New Measurement</CardTitle>
+        <CardTitle>Ajouter une nouvelle prise de mesures</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -115,7 +115,7 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
                 name="date"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
-                    <FormLabel>Date of Measurement</FormLabel>
+                    <FormLabel>Date de la prise de mesure</FormLabel>
                     <Popover>
                       <PopoverTrigger asChild>
                         <FormControl>
@@ -129,7 +129,7 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
                             {field.value ? (
                               format(field.value, "PPP")
                             ) : (
-                              <span>Pick a date</span>
+                              <span>Choisir une date</span>
                             )}
                             <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                           </Button>
@@ -156,11 +156,11 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
                 name="garmentType"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Garment Type</FormLabel>
+                    <FormLabel>Type de vêtement</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select garment type" />
+                          <SelectValue placeholder="Sélectionner un type de vêtement" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -178,11 +178,11 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
                 name="gender"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Gender for Fit</FormLabel>
+                    <FormLabel>Sexe pour la coupe</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select gender" />
+                          <SelectValue placeholder="Sélectionner un sexe" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -200,7 +200,7 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
             {currentMeasurementFields.length > 0 && (
               <Card className="pt-4">
                 <CardHeader className="p-4 pt-0">
-                  <CardTitle className="text-xl">Enter Client Measurements (in cm)</CardTitle>
+                  <CardTitle className="text-xl">Saisir les mesures du client (en cm)</CardTitle>
                 </CardHeader>
                 <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {currentMeasurementFields.map((fieldName) => (
@@ -212,7 +212,7 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
                         <FormItem>
                           <FormLabel>{fieldName}</FormLabel>
                           <FormControl>
-                            <Input type="number" step="0.1" placeholder="e.g. 34.5" {...field} />
+                            <Input type="number" step="0.1" placeholder="ex: 34.5" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -228,10 +228,10 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Measurement Notes</FormLabel>
+                  <FormLabel>Notes sur les mesures</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Any specific notes for this set of measurements (e.g., posture, requested ease)."
+                      placeholder="Notes spécifiques pour cette série de mesures (ex: posture, aisance demandée)."
                       className="resize-none"
                       {...field}
                     />
@@ -241,13 +241,13 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
               )}
             />
             <Button type="submit" disabled={isSubmitting || currentMeasurementFields.length === 0}>
-              {isSubmitting ? "Saving..." : "Save Measurement"}
+              {isSubmitting ? "Enregistrement..." : "Enregistrer les mesures"}
             </Button>
             {currentMeasurementFields.length === 0 && (watchedGarmentType && watchedGender) && (
-                 <FormDescription className="text-sm text-destructive">No measurement fields configured for this garment type and gender combination.</FormDescription>
+                 <FormDescription className="text-sm text-destructive">Aucun champ de mesure configuré pour cette combinaison type de vêtement/sexe.</FormDescription>
             )}
             {currentMeasurementFields.length === 0 && !(watchedGarmentType && watchedGender) && (
-                 <FormDescription className="text-sm text-muted-foreground">Select garment type and gender to see measurement fields.</FormDescription>
+                 <FormDescription className="text-sm text-muted-foreground">Sélectionner le type de vêtement et le sexe pour afficher les champs de mesure.</FormDescription>
             )}
           </form>
         </Form>
@@ -255,3 +255,5 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
     </Card>
   );
 }
+
+    
