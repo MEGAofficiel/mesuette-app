@@ -2,7 +2,7 @@
 "use client";
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { MeasurementForm } from '@/app/(components/measurements/measurement-form';
+import { MeasurementForm } from '@/app/(components)/measurements/measurement-form';
 import { useAppContext } from '@/context/app-context';
 import { useToast } from '@/hooks/use-toast';
 import type { Measurement } from '@/lib/types';
