@@ -3,7 +3,7 @@
 import { useParams, useRouter } from 'next/navigation';
 import { useAppContext } from '@/context/app-context';
 import { ClientDetailsCard } from '@/app/(components)/clients/client-details-card';
-import { MeasurementHistory } from '@/app/(components/measurements/measurement-history';
+import { MeasurementHistory } from '@/app/(components)/measurements/measurement-history';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { PlusCircle, ArrowLeft, Trash2, UserX } from 'lucide-react';
