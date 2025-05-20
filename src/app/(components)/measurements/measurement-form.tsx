@@ -200,7 +200,7 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
             {currentMeasurementFields.length > 0 && (
               <Card className="pt-4">
                 <CardHeader className="p-4 pt-0">
-                  <CardTitle className="text-xl">Measurements (in cm)</CardTitle>
+                  <CardTitle className="text-xl">Enter Client Measurements (in cm)</CardTitle>
                 </CardHeader>
                 <CardContent className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {currentMeasurementFields.map((fieldName) => (
