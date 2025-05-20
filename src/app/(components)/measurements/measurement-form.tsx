@@ -240,20 +240,20 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isSubmitting || currentMeasurementFields.length === 0}>
-              {isSubmitting ? "Enregistrement..." : "Enregistrer les mesures"}
-            </Button>
-            {currentMeasurementFields.length === 0 && (watchedGarmentType && watchedGender) && (
-                 <FormDescription className="text-sm text-destructive">Aucun champ de mesure configuré pour cette combinaison type de vêtement/sexe.</FormDescription>
-            )}
+            
             {currentMeasurementFields.length === 0 && !(watchedGarmentType && watchedGender) && (
                  <FormDescription className="text-sm text-muted-foreground">Sélectionner le type de vêtement et le sexe pour afficher les champs de mesure.</FormDescription>
             )}
+            {currentMeasurementFields.length === 0 && (watchedGarmentType && watchedGender) && (
+                 <FormDescription className="text-sm text-destructive">Aucun champ de mesure configuré pour cette combinaison type de vêtement/sexe.</FormDescription>
+            )}
+
+            <Button type="submit" disabled={isSubmitting || currentMeasurementFields.length === 0}>
+              {isSubmitting ? "Enregistrement..." : "Enregistrer les mesures"}
+            </Button>
           </form>
         </Form>
       </CardContent>
     </Card>
   );
 }
-
-    
