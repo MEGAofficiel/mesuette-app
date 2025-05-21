@@ -16,6 +16,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import type { Client } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Sparkles, Loader2 } from "lucide-react";
+import { useState } from "react";
+import { suggestClientNote, type SuggestClientNoteInput } from "@/ai/flows/suggest-client-note-flow";
+import { useToast } from "@/hooks/use-toast";
 
 const clientFormSchema = z.object({
   name: z.string().min(2, {
@@ -45,6 +49,40 @@ export function ClientForm({ initialData, onSubmit, isSubmitting = false, submit
       notes: "",
     },
   });
+
+  const [isSuggestingNote, setIsSuggestingNote] = useState(false);
+  const { toast } = useToast();
+
+  const handleSuggestNote = async () => {
+    const clientName = form.getValues("name");
+    if (!clientName.trim()) {
+      toast({
+        title: "Nom du client requis",
+        description: "Veuillez d'abord saisir un nom pour le client.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSuggestingNote(true);
+    try {
+      const result = await suggestClientNote({ clientName });
+      form.setValue("notes", result.note, { shouldValidate: true, shouldDirty: true });
+      toast({
+        title: "Suggestion de note générée",
+        description: "La note a été insérée. Vous pouvez la modifier.",
+      });
+    } catch (error) {
+      console.error("Failed to suggest note:", error);
+      toast({
+        title: "Erreur de suggestion",
+        description: "Impossible de générer une suggestion de note pour le moment.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSuggestingNote(false);
+    }
+  };
 
   return (
     <Card>
@@ -98,7 +136,24 @@ export function ClientForm({ initialData, onSubmit, isSubmitting = false, submit
               name="notes"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Notes</FormLabel>
+                  <div className="flex items-center justify-between">
+                    <FormLabel>Notes</FormLabel>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleSuggestNote}
+                      disabled={isSuggestingNote}
+                      className="text-xs"
+                    >
+                      {isSuggestingNote ? (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        <Sparkles className="mr-2 h-4 w-4" />
+                      )}
+                      Suggestion IA
+                    </Button>
+                  </div>
                   <FormControl>
                     <Textarea
                       placeholder="Any relevant notes about the client (e.g., preferences, allergies)."
@@ -110,7 +165,7 @@ export function ClientForm({ initialData, onSubmit, isSubmitting = false, submit
                 </FormItem>
               )}
             />
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting || isSuggestingNote}>
               {isSubmitting ? "Saving..." : submitButtonText}
             </Button>
           </form>
