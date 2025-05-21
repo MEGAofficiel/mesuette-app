@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ClientListItem } from '@/app/(components)/clients/client-list-item';
 import { useAppContext } from '@/context/app-context';
 import { PlusCircle, Users } from 'lucide-react';
-import Image from 'next/image';
+import { Badge } from '@/components/ui/badge'; // Import Badge component
 
 export default function ClientsPage() {
   const { clients } = useAppContext();
@@ -13,10 +13,17 @@ export default function ClientsPage() {
   return (
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
-          <Users className="h-8 w-8 text-primary" />
-          Clients
-        </h1>
+        <div className="flex items-center gap-3">
+          <h1 className="text-3xl font-bold tracking-tight flex items-center gap-2">
+            <Users className="h-8 w-8 text-primary" />
+            Clients
+          </h1>
+          {clients.length > 0 && (
+            <Badge variant="secondary" className="text-lg px-3 py-1">
+              {clients.length}
+            </Badge>
+          )}
+        </div>
         <Button asChild>
           <Link href="/clients/add" className="flex items-center gap-2">
             <PlusCircle className="h-5 w-5" />
@@ -45,4 +52,3 @@ export default function ClientsPage() {
     </div>
   );
 }
-
