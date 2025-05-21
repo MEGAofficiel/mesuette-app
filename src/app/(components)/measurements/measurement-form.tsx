@@ -72,18 +72,19 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
       const fields = getMeasurementFields(watchedGarmentType, watchedGender);
       setCurrentMeasurementFields(fields);
       // Reset measurements field when garment/gender changes to avoid stale data
+      // or to initialize if new fields appear
       const newMeasurements: Record<string, string> = {};
       fields.forEach(field => {
         newMeasurements[field] = form.getValues(`measurements.${field}`) || "";
       });
-      form.setValue("measurements", newMeasurements);
+      form.setValue("measurements", newMeasurements, { shouldValidate: true });
 
     } else {
       setCurrentMeasurementFields([]);
-      form.setValue("measurements", {});
+      form.setValue("measurements", {}, { shouldValidate: true });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [watchedGarmentType, watchedGender, form.setValue, form.getValues]);
+  }, [watchedGarmentType, watchedGender, form.setValue, form.getValues]); // form.setValue and form.getValues are stable
 
 
   const processAndSubmit = (data: MeasurementFormValues) => {
@@ -198,7 +199,7 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
               />
             </div>
 
-            {currentMeasurementFields.length > 0 && (
+            {currentMeasurementFields.length > 0 && watchedGarmentType !== 'other' && (
               <Card className="pt-4">
                 <CardHeader className="p-4 pt-0">
                   <CardTitle className="text-xl">Saisir les mesures du client (en cm)</CardTitle>
@@ -213,7 +214,7 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
                         <FormItem>
                           <FormLabel>{fieldName}</FormLabel>
                           <FormControl>
-                            <Input type="number" step="0.1" placeholder="ex: 34.5" {...field} />
+                            <Input type="number" step="0.1" placeholder="ex: 34.5" {...field} value={field.value ?? ''} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -232,7 +233,11 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
                   <FormLabel>Notes sur les mesures</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder="Notes spécifiques pour cette série de mesures (ex: posture, aisance demandée)."
+                      placeholder={
+                        watchedGarmentType === 'other' 
+                          ? "Veuillez détailler ici les mesures spécifiques pour ce type de vêtement."
+                          : "Notes spécifiques pour cette série de mesures (ex: posture, aisance demandée)."
+                      }
                       className="resize-none"
                       {...field}
                     />
@@ -242,14 +247,17 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
               )}
             />
             
-            {currentMeasurementFields.length === 0 && !(watchedGarmentType && watchedGender) && (
+            {!(watchedGarmentType && watchedGender) && (
                  <FormDescription className="text-sm text-muted-foreground">Sélectionner le type de vêtement et le sexe pour afficher les champs de mesure.</FormDescription>
             )}
-            {currentMeasurementFields.length === 0 && (watchedGarmentType && watchedGender) && (
+            {currentMeasurementFields.length === 0 && (watchedGarmentType && watchedGender) && watchedGarmentType !== 'other' && (
                  <FormDescription className="text-sm text-destructive">Aucun champ de mesure configuré pour cette combinaison type de vêtement/sexe.</FormDescription>
             )}
+             {watchedGarmentType === 'other' && watchedGender && (
+                 <FormDescription className="text-sm text-muted-foreground">Pour le type "Autre", utilisez le champ "Notes sur les mesures" ci-dessus pour enregistrer les détails.</FormDescription>
+            )}
 
-            <Button type="submit" disabled={isSubmitting || currentMeasurementFields.length === 0}>
+            <Button type="submit" disabled={isSubmitting || (!form.formState.isValid || ((currentMeasurementFields.length === 0 && watchedGarmentType !== 'other' && watchedGarmentType && watchedGender)) )}>
               {isSubmitting ? "Enregistrement..." : "Enregistrer les mesures"}
             </Button>
           </form>
