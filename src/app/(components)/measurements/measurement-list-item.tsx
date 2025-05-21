@@ -3,7 +3,7 @@
 import type { Measurement } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CalendarDays, Shirt, Drama, Ruler, Trash2 } from 'lucide-react'; 
+import { CalendarDays, Shirt, Drama, Ruler, Trash2, PencilLine } from 'lucide-react'; 
 import { format } from 'date-fns';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { useAppContext } from '@/context/app-context';
@@ -19,10 +19,11 @@ const garmentIcons: Record<Measurement['garmentType'], React.ElementType> = {
   shirt: Shirt,
   pants: Ruler, 
   dress: Drama,
+  other: PencilLine, // Icône pour "Autre"
 };
 
 export function MeasurementListItem({ measurement, onDelete }: MeasurementListItemProps) {
-  const Icon = garmentIcons[measurement.garmentType] || Ruler;
+  const Icon = garmentIcons[measurement.garmentType] || Ruler; // Fallback à Ruler si non trouvé
   const { toast } = useToast();
 
   const garmentLabel = GARMENT_TYPES.find(gt => gt.id === measurement.garmentType)?.label || measurement.garmentType;
@@ -56,16 +57,20 @@ export function MeasurementListItem({ measurement, onDelete }: MeasurementListIt
         <p className="text-sm text-muted-foreground truncate">
           {measurement.notes || "Aucune note spécifique pour cette mesure."}
         </p>
-        <details className="mt-2 text-xs">
-          <summary className="cursor-pointer text-primary hover:underline">Voir les Mesures</summary>
-          <ul className="mt-1 pl-4 list-disc list-inside bg-accent/30 p-2 rounded-md">
-            {Object.entries(measurement.measurements).map(([key, value]) => (
-              <li key={key}>
-                <span className="font-medium">{key}:</span> {value} cm
-              </li>
-            ))}
-          </ul>
-        </details>
+        {Object.keys(measurement.measurements).length > 0 ? (
+          <details className="mt-2 text-xs">
+            <summary className="cursor-pointer text-primary hover:underline">Voir les Mesures</summary>
+            <ul className="mt-1 pl-4 list-disc list-inside bg-accent/30 p-2 rounded-md">
+              {Object.entries(measurement.measurements).map(([key, value]) => (
+                <li key={key}>
+                  <span className="font-medium">{key}:</span> {value} cm
+                </li>
+              ))}
+            </ul>
+          </details>
+        ) : (
+           garmentLabel !== 'Autre' && <p className="mt-2 text-xs text-muted-foreground">Aucune mesure spécifique enregistrée.</p>
+        )}
       </CardContent>
       <CardFooter className="flex justify-end">
          <AlertDialog>
