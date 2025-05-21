@@ -27,14 +27,6 @@ export default function ClientsPage() {
 
       {clients.length === 0 ? (
         <div className="text-center py-12">
-          <Image 
-            src="https://placehold.co/300x200.png" 
-            alt="Illustration aucun client" 
-            width={300} 
-            height={200}
-            data-ai-hint="empty state illustration"
-            className="mx-auto mb-6 rounded-lg shadow-md"
-          />
           <h2 className="text-2xl font-semibold mb-2">Aucun Client Pour l'Instant</h2>
           <p className="text-muted-foreground mb-6">Commencez par ajouter votre premier client.</p>
           <Button asChild size="lg">
@@ -53,3 +45,4 @@ export default function ClientsPage() {
     </div>
   );
 }
+
