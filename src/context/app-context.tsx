@@ -20,45 +20,9 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 // Using French labels for initial data where applicable
-const initialClients: Client[] = [
-  { id: '1', name: 'Jean Dupont', email: 'jean.dupont@example.com', phone: '0601020304', notes: 'Préfère une coupe classique.', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString() },
-  { id: '2', name: 'Marie Martin', email: 'marie.martin@example.com', phone: '0701020304', notes: 'Allergique à la laine.', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString() },
-];
+const initialClients: Client[] = [];
 
-const initialMeasurements: Measurement[] = [
-  { 
-    id: 'm1', 
-    clientId: '1', 
-    date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 4).toISOString(), 
-    garmentType: 'shirt', 
-    gender: 'male',
-    measurements: { 
-      'Tour de Cou': 39.5, 
-      'Tour de Poitrine': 102, 
-      'Tour de Taille (Chemise)': 86, 
-      'Longueur Totale': 74, 
-      'Longueur de Manche': 63.5, 
-      'Largeur d\'Épaule': 46 
-    },
-    notes: 'Pour une chemise de ville.'
-  },
-  { 
-    id: 'm2', 
-    clientId: '2', 
-    date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1).toISOString(), 
-    garmentType: 'dress', 
-    gender: 'female',
-    measurements: { 
-      'Tour de Buste': 91.5, 
-      'Tour de Taille (Robe)': 71, 
-      'Tour de Hanches (Robe)': 96.5, 
-      'Longueur Totale (Épaule à Ourlet)': 101.5, 
-      'Longueur de Manche (Robe)': 25.5, 
-      'Largeur d\'Épaule (Robe)': 38 
-    },
-    notes: 'Robe d\'été, coupe A.'
-  },
-];
+const initialMeasurements: Measurement[] = [];
 
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -130,3 +94,4 @@ export const useAppContext = (): AppContextType => {
   }
   return context;
 };
+
