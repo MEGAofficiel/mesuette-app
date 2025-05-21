@@ -23,9 +23,9 @@ import { useToast } from "@/hooks/use-toast";
 
 const clientFormSchema = z.object({
   name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
+    message: "Le nom doit comporter au moins 2 caractères.",
   }),
-  email: z.string().email({ message: "Invalid email address." }).optional().or(z.literal('')),
+  email: z.string().email({ message: "Adresse e-mail invalide." }).optional().or(z.literal('')),
   phone: z.string().optional().or(z.literal('')),
   notes: z.string().optional().or(z.literal('')),
 });
@@ -39,7 +39,7 @@ interface ClientFormProps {
   submitButtonText?: string;
 }
 
-export function ClientForm({ initialData, onSubmit, isSubmitting = false, submitButtonText = "Save Client" }: ClientFormProps) {
+export function ClientForm({ initialData, onSubmit, isSubmitting = false, submitButtonText }: ClientFormProps) {
   const form = useForm<ClientFormValues>({
     resolver: zodResolver(clientFormSchema),
     defaultValues: initialData || {
@@ -52,6 +52,9 @@ export function ClientForm({ initialData, onSubmit, isSubmitting = false, submit
 
   const [isSuggestingNote, setIsSuggestingNote] = useState(false);
   const { toast } = useToast();
+
+  const effectiveSubmitButtonText = submitButtonText || (initialData ? "Modifier Client" : "Enregistrer Client");
+
 
   const handleSuggestNote = async () => {
     const clientName = form.getValues("name");
@@ -87,7 +90,7 @@ export function ClientForm({ initialData, onSubmit, isSubmitting = false, submit
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{initialData ? "Edit Client" : "Add New Client"}</CardTitle>
+        <CardTitle>{initialData ? "Modifier Client" : "Ajouter Nouveau Client"}</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -97,9 +100,9 @@ export function ClientForm({ initialData, onSubmit, isSubmitting = false, submit
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Full Name</FormLabel>
+                  <FormLabel>Nom Complet</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g. John Doe" {...field} />
+                    <Input placeholder="ex: Jean Dupont" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -110,9 +113,9 @@ export function ClientForm({ initialData, onSubmit, isSubmitting = false, submit
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email Address</FormLabel>
+                  <FormLabel>Adresse E-mail</FormLabel>
                   <FormControl>
-                    <Input type="email" placeholder="e.g. john.doe@example.com" {...field} />
+                    <Input type="email" placeholder="ex: jean.dupont@example.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -123,9 +126,9 @@ export function ClientForm({ initialData, onSubmit, isSubmitting = false, submit
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Phone Number</FormLabel>
+                  <FormLabel>Numéro de Téléphone</FormLabel>
                   <FormControl>
-                    <Input type="tel" placeholder="e.g. (555) 123-4567" {...field} />
+                    <Input type="tel" placeholder="ex: 06 12 34 56 78" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -156,7 +159,7 @@ export function ClientForm({ initialData, onSubmit, isSubmitting = false, submit
                   </div>
                   <FormControl>
                     <Textarea
-                      placeholder="Any relevant notes about the client (e.g., preferences, allergies)."
+                      placeholder="Toutes notes pertinentes sur le client (ex: préférences, allergies)."
                       className="resize-none"
                       {...field}
                     />
@@ -166,7 +169,7 @@ export function ClientForm({ initialData, onSubmit, isSubmitting = false, submit
               )}
             />
             <Button type="submit" disabled={isSubmitting || isSuggestingNote}>
-              {isSubmitting ? "Saving..." : submitButtonText}
+              {isSubmitting ? "Enregistrement..." : effectiveSubmitButtonText}
             </Button>
           </form>
         </Form>

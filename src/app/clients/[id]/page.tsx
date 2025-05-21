@@ -30,18 +30,18 @@ export default function ClientDetailPage() {
   }, [clientId, getClientById]);
 
   if (client === undefined) {
-    return <div className="flex justify-center items-center h-64">Loading client details...</div>;
+    return <div className="flex justify-center items-center h-64">Chargement des détails du client...</div>;
   }
 
   if (!client) {
     return (
       <div className="text-center py-10">
         <UserX className="h-16 w-16 text-destructive mx-auto mb-4" />
-        <h2 className="text-2xl font-semibold mb-2">Client Not Found</h2>
-        <p className="text-muted-foreground mb-6">The client you are looking for does not exist or may have been deleted.</p>
+        <h2 className="text-2xl font-semibold mb-2">Client Non Trouvé</h2>
+        <p className="text-muted-foreground mb-6">Le client que vous recherchez n'existe pas ou a peut-être été supprimé.</p>
         <Button asChild variant="outline">
           <Link href="/clients">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Clients List
+            <ArrowLeft className="mr-2 h-4 w-4" /> Retour à la Liste des Clients
           </Link>
         </Button>
       </div>
@@ -53,8 +53,8 @@ export default function ClientDetailPage() {
   const handleDeleteClient = () => {
     deleteClient(client.id);
     toast({
-      title: "Client Deleted",
-      description: `${client.name} and all associated measurements have been deleted.`,
+      title: "Client Supprimé",
+      description: `${client.name} et toutes les mesures associées ont été supprimés.`,
     });
     router.push('/clients');
   };
@@ -63,31 +63,31 @@ export default function ClientDetailPage() {
     <div className="space-y-8">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <Button variant="outline" size="sm" onClick={() => router.push('/clients')}>
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Clients
+          <ArrowLeft className="mr-2 h-4 w-4" /> Retour aux Clients
         </Button>
         <div className="flex gap-2">
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="destructive" size="sm">
-                <Trash2 className="mr-2 h-4 w-4" /> Delete Client
+                <Trash2 className="mr-2 h-4 w-4" /> Supprimer Client
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure you want to delete {client.name}?</AlertDialogTitle>
+                <AlertDialogTitle>Êtes-vous sûr de vouloir supprimer {client.name} ?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete the client and all their associated measurements.
+                  Cette action est irréversible. Cela supprimera définitivement le client et toutes ses mesures associées.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDeleteClient}>Delete Client</AlertDialogAction>
+                <AlertDialogCancel>Annuler</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDeleteClient}>Supprimer le Client</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
           <Button asChild size="sm">
             <Link href={`/clients/${client.id}/add-measurement`}>
-              <PlusCircle className="mr-2 h-4 w-4" /> Add Measurement
+              <PlusCircle className="mr-2 h-4 w-4" /> Ajouter Mesure
             </Link>
           </Button>
         </div>

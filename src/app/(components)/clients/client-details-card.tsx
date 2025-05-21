@@ -6,6 +6,7 @@ import { Mail, Phone, Edit, StickyNote, CalendarDays } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { format } from 'date-fns';
+import { APP_LOCALE } from '@/lib/constants';
 
 interface ClientDetailsCardProps {
   client: Client;
@@ -18,11 +19,11 @@ export function ClientDetailsCard({ client }: ClientDetailsCardProps) {
         <div>
           <CardTitle className="text-2xl">{client.name}</CardTitle>
           <CardDescription>
-             Client since {format(new Date(client.createdAt), "MMMM d, yyyy")}
+             Client depuis le {format(new Date(client.createdAt), "PPP", { locale: APP_LOCALE })}
           </CardDescription>
         </div>
         {/* <Button variant="outline" size="sm" asChild>
-          <Link href={`/clients/${client.id}/edit`}> <Edit className="mr-2 h-4 w-4" /> Edit Client </Link>
+          <Link href={`/clients/${client.id}/edit`}> <Edit className="mr-2 h-4 w-4" /> Modifier Client </Link>
         </Button> */}
       </CardHeader>
       <CardContent className="space-y-4">

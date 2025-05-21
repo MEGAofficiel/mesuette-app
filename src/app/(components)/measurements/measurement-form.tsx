@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GARMENT_TYPES, GENDERS, getMeasurementFields, type GarmentType, type Gender } from "@/lib/constants";
+import { GARMENT_TYPES, GENDERS, getMeasurementFields, type GarmentType, type Gender, APP_LOCALE } from "@/lib/constants";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { CalendarIcon } from "lucide-react";
@@ -27,17 +27,17 @@ import { useEffect, useState } from "react";
 
 // Base schema for dynamic fields
 const measurementValueSchema = z.string().refine(val => !isNaN(parseFloat(val)) && parseFloat(val) > 0, {
-  message: "Must be a positive number.",
+  message: "Doit être un nombre positif.",
 }).optional().or(z.literal(''));
 
 
 const measurementFormSchema = z.object({
-  date: z.date({ required_error: "A date for the measurement is required." }),
+  date: z.date({ required_error: "Une date pour la mesure est requise." }),
   garmentType: z.enum(GARMENT_TYPES.map(gt => gt.id) as [GarmentType, ...GarmentType[]], {
-    required_error: "Please select a garment type.",
+    required_error: "Veuillez sélectionner un type de vêtement.",
   }),
   gender: z.enum(GENDERS.map(g => g.id) as [Gender, ...Gender[]], {
-    required_error: "Please select a gender.",
+    required_error: "Veuillez sélectionner un sexe.",
   }),
   notes: z.string().optional(),
   measurements: z.record(measurementValueSchema), // Dynamic fields
@@ -127,7 +127,7 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
                             )}
                           >
                             {field.value ? (
-                              format(field.value, "PPP")
+                              format(field.value, "PPP", { locale: APP_LOCALE })
                             ) : (
                               <span>Choisir une date</span>
                             )}
@@ -137,6 +137,7 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start">
                         <Calendar
+                          locale={APP_LOCALE}
                           mode="single"
                           selected={field.value}
                           onSelect={field.onChange}

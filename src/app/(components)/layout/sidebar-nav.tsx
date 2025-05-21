@@ -13,9 +13,9 @@ interface SidebarNavProps {
 
 const navItems = [
   { href: '/clients', label: 'Clients', icon: Users },
-  { href: '/clients/add', label: 'Add Client', icon: PlusCircle },
+  { href: '/clients/add', label: 'Ajouter Client', icon: PlusCircle },
   // Add more items here later, e.g. Dashboard
-  // { href: '/', label: 'Dashboard', icon: LayoutDashboard },
+  // { href: '/', label: 'Tableau de bord', icon: LayoutDashboard },
 ];
 
 export function SidebarNav({ isMobile = false, onLinkClick }: SidebarNavProps) {

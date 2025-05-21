@@ -31,10 +31,10 @@ export function MeasurementHistory({ clientId, measurements: initialMeasurements
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <History className="h-6 w-6 text-primary" />
-          Measurement History
+          Historique des Mesures
         </CardTitle>
         <CardDescription>
-          All recorded measurements for this client, sorted by most recent.
+          Toutes les mesures enregistrées pour ce client, triées par date la plus récente.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -42,16 +42,16 @@ export function MeasurementHistory({ clientId, measurements: initialMeasurements
           <div className="text-center py-8">
             <Image 
               src="https://placehold.co/200x150.png" 
-              alt="No measurements placeholder" 
+              alt="Placeholder aucune mesure" 
               width={200} 
               height={150}
               data-ai-hint="empty state ruler"
               className="mx-auto mb-4 rounded-md"
             />
-            <p className="text-muted-foreground mb-4">No measurements recorded for this client yet.</p>
+            <p className="text-muted-foreground mb-4">Aucune mesure enregistrée pour ce client pour le moment.</p>
             <Button asChild>
               <Link href={`/clients/${clientId}/add-measurement`}>
-                <Ruler className="mr-2 h-4 w-4" /> Add First Measurement
+                <Ruler className="mr-2 h-4 w-4" /> Ajouter Première Mesure
               </Link>
             </Button>
           </div>

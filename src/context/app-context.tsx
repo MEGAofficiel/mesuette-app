@@ -3,6 +3,7 @@
 import type React from 'react';
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { Client, Measurement } from '@/lib/types';
+import { GARMENT_TYPES, GENDERS } from '@/lib/constants'; // For initial data labels if needed
 
 interface AppContextType {
   clients: Client[];
@@ -18,9 +19,10 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
+// Using French labels for initial data where applicable
 const initialClients: Client[] = [
-  { id: '1', name: 'John Doe', email: 'john.doe@example.com', phone: '555-1234', notes: 'Prefers classic fit.', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString() },
-  { id: '2', name: 'Jane Smith', email: 'jane.smith@example.com', phone: '555-5678', notes: 'Allergic to wool.', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString() },
+  { id: '1', name: 'Jean Dupont', email: 'jean.dupont@example.com', phone: '0601020304', notes: 'Préfère une coupe classique.', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 5).toISOString() },
+  { id: '2', name: 'Marie Martin', email: 'marie.martin@example.com', phone: '0701020304', notes: 'Allergique à la laine.', createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString() },
 ];
 
 const initialMeasurements: Measurement[] = [
@@ -30,8 +32,15 @@ const initialMeasurements: Measurement[] = [
     date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 4).toISOString(), 
     garmentType: 'shirt', 
     gender: 'male',
-    measurements: { 'Neck Circumference': 15.5, 'Chest Circumference': 40, 'Waist Circumference (Shirt)': 34, 'Overall Length': 29, 'Sleeve Length': 25, 'Shoulder Width': 18 },
-    notes: 'For a business shirt.'
+    measurements: { 
+      'Tour de Cou': 39.5, 
+      'Tour de Poitrine': 102, 
+      'Tour de Taille (Chemise)': 86, 
+      'Longueur Totale': 74, 
+      'Longueur de Manche': 63.5, 
+      'Largeur d\'Épaule': 46 
+    },
+    notes: 'Pour une chemise de ville.'
   },
   { 
     id: 'm2', 
@@ -39,8 +48,15 @@ const initialMeasurements: Measurement[] = [
     date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 1).toISOString(), 
     garmentType: 'dress', 
     gender: 'female',
-    measurements: { 'Bust Circumference': 36, 'Waist Circumference (Dress)': 28, 'Hip Circumference (Dress)': 38, 'Full Length (Shoulder to Hem)': 40, 'Sleeve Length (Dress)': 10, 'Shoulder Width (Dress)': 15 },
-    notes: 'Summer dress, A-line.'
+    measurements: { 
+      'Tour de Buste': 91.5, 
+      'Tour de Taille (Robe)': 71, 
+      'Tour de Hanches (Robe)': 96.5, 
+      'Longueur Totale (Épaule à Ourlet)': 101.5, 
+      'Longueur de Manche (Robe)': 25.5, 
+      'Largeur d\'Épaule (Robe)': 38 
+    },
+    notes: 'Robe d\'été, coupe A.'
   },
 ];
 

@@ -24,11 +24,11 @@ export default function AddMeasurementPage() {
     return (
       <div className="text-center py-10">
         <UserX className="h-16 w-16 text-destructive mx-auto mb-4" />
-        <h2 className="text-2xl font-semibold mb-2">Client Not Found</h2>
-        <p className="text-muted-foreground mb-6">Cannot add measurement as the client was not found.</p>
+        <h2 className="text-2xl font-semibold mb-2">Client Non Trouvé</h2>
+        <p className="text-muted-foreground mb-6">Impossible d'ajouter une mesure car le client n'a pas été trouvé.</p>
         <Button asChild variant="outline">
           <Link href="/clients">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Clients List
+            <ArrowLeft className="mr-2 h-4 w-4" /> Retour à la Liste des Clients
           </Link>
         </Button>
       </div>
@@ -45,15 +45,15 @@ export default function AddMeasurementPage() {
       // @ts-ignore // MeasurementForm already processes date to string
       addMeasurement(measurementData);
       toast({
-        title: "Measurement Added",
-        description: `New ${data.garmentType} measurement for ${client.name} has been successfully added.`,
+        title: "Mesure Ajoutée",
+        description: `Nouvelle mesure ${data.garmentType} pour ${client.name} ajoutée avec succès.`,
       });
       router.push(`/clients/${client.id}`);
     } catch (error) {
       console.error("Failed to add measurement:", error);
       toast({
-        title: "Error",
-        description: "Failed to add measurement. Please try again.",
+        title: "Erreur",
+        description: "Échec de l'ajout de la mesure. Veuillez réessayer.",
         variant: "destructive",
       });
       setIsSubmitting(false);
@@ -63,9 +63,9 @@ export default function AddMeasurementPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold tracking-tight">Add Measurement for {client.name}</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Ajouter Mesure pour {client.name}</h1>
         <Button variant="outline" size="sm" onClick={() => router.back()}>
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to Client
+          <ArrowLeft className="mr-2 h-4 w-4" /> Retour au Client
         </Button>
       </div>
       <MeasurementForm clientId={client.id} onSubmit={handleSubmit} isSubmitting={isSubmitting} />

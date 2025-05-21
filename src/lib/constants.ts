@@ -1,12 +1,17 @@
+import type { Locale } from 'date-fns';
+import { fr } from 'date-fns/locale';
+
+export const APP_LOCALE: Locale = fr;
+
 export const GARMENT_TYPES = [
-  { id: 'shirt', label: 'Shirt' },
-  { id: 'pants', label: 'Pants' },
-  { id: 'dress', label: 'Dress' },
+  { id: 'shirt', label: 'Chemise' },
+  { id: 'pants', label: 'Pantalon' },
+  { id: 'dress', label: 'Robe' },
 ] as const;
 
 export const GENDERS = [
-  { id: 'male', label: 'Male' },
-  { id: 'female', label: 'Female' },
+  { id: 'male', label: 'Homme' },
+  { id: 'female', label: 'Femme' },
 ] as const;
 
 export type GarmentType = (typeof GARMENT_TYPES)[number]['id'];
@@ -18,28 +23,28 @@ export const MEASUREMENT_FIELDS_CONFIG: Record<
   { common: string[]; male: string[]; female: string[] }
 > = {
   shirt: {
-    common: ['Overall Length', 'Sleeve Length', 'Shoulder Width'],
-    male: ['Neck Circumference', 'Chest Circumference', 'Waist Circumference (Shirt)'],
-    female: ['Neck Circumference', 'Bust Circumference', 'Waist Circumference (Shirt)', 'Hip Circumference (Shirt)', 'Dart Placement'],
+    common: ['Longueur Totale', 'Longueur de Manche', 'Largeur d\'Épaule'],
+    male: ['Tour de Cou', 'Tour de Poitrine', 'Tour de Taille (Chemise)'],
+    female: ['Tour de Cou', 'Tour de Buste', 'Tour de Taille (Chemise)', 'Tour de Hanches (Chemise)', 'Placement de Pince'],
   },
   pants: {
-    common: ['Inseam', 'Outseam', 'Thigh Circumference', 'Knee Circumference', 'Cuff Opening'],
-    male: ['Waist Circumference (Pants)'],
-    female: ['Waist Circumference (Pants)', 'Hip Circumference (Pants)', 'Rise'],
+    common: ['Entrejambe', 'Longueur Extérieure', 'Tour de Cuisse', 'Tour de Genou', 'Ouverture Bas'],
+    male: ['Tour de Taille (Pantalon)'],
+    female: ['Tour de Taille (Pantalon)', 'Tour de Hanches (Pantalon)', 'Hauteur de Fourche'],
   },
   dress: {
-    common: ['Full Length (Shoulder to Hem)', 'Sleeve Length (Dress)', 'Shoulder Width (Dress)'],
+    common: ['Longueur Totale (Épaule à Ourlet)', 'Longueur de Manche (Robe)', 'Largeur d\'Épaule (Robe)'],
     male: [], // Typically not applicable for dresses
     female: [
-      'Bust Circumference',
-      'Waist Circumference (Dress)',
-      'Hip Circumference (Dress)',
-      'Shoulder to Bust Point',
-      'Shoulder to Waist',
-      'Shoulder to Hip',
-      'Bicep Circumference',
-      'Back Width',
-      'Skirt Length (Waist to Hem)',
+      'Tour de Buste',
+      'Tour de Taille (Robe)',
+      'Tour de Hanches (Robe)',
+      'Épaule à Pointe de Poitrine',
+      'Épaule à Taille',
+      'Épaule à Hanches',
+      'Tour de Biceps',
+      'Largeur de Dos',
+      'Longueur de Jupe (Taille à Ourlet)',
     ],
   },
 };

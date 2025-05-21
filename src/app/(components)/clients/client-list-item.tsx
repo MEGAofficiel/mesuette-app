@@ -4,8 +4,9 @@ import Link from 'next/link';
 import type { Client } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { User, Mail, Phone, CalendarDays } from 'lucide-react';
+import { User, Mail, Phone } from 'lucide-react';
 import { format } from 'date-fns';
+import { APP_LOCALE } from '@/lib/constants';
 
 interface ClientListItemProps {
   client: Client;
@@ -20,7 +21,7 @@ export function ClientListItem({ client }: ClientListItemProps) {
           {client.name}
         </CardTitle>
         <CardDescription>
-          Added on {format(new Date(client.createdAt), "MMMM d, yyyy")}
+          Ajouté le {format(new Date(client.createdAt), "PPP", { locale: APP_LOCALE })}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">
@@ -39,7 +40,7 @@ export function ClientListItem({ client }: ClientListItemProps) {
       </CardContent>
       <CardFooter>
         <Button asChild variant="outline" size="sm">
-          <Link href={`/clients/${client.id}`}>View Details</Link>
+          <Link href={`/clients/${client.id}`}>Voir Détails</Link>
         </Button>
       </CardFooter>
     </Card>

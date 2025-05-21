@@ -20,7 +20,7 @@ export default function ClientsPage() {
         <Button asChild>
           <Link href="/clients/add" className="flex items-center gap-2">
             <PlusCircle className="h-5 w-5" />
-            Add New Client
+            Ajouter Nouveau Client
           </Link>
         </Button>
       </div>
@@ -29,17 +29,17 @@ export default function ClientsPage() {
         <div className="text-center py-12">
           <Image 
             src="https://placehold.co/300x200.png" 
-            alt="No clients placeholder" 
+            alt="Illustration aucun client" 
             width={300} 
             height={200}
             data-ai-hint="empty state illustration"
             className="mx-auto mb-6 rounded-lg shadow-md"
           />
-          <h2 className="text-2xl font-semibold mb-2">No Clients Yet</h2>
-          <p className="text-muted-foreground mb-6">Get started by adding your first client.</p>
+          <h2 className="text-2xl font-semibold mb-2">Aucun Client Pour l'Instant</h2>
+          <p className="text-muted-foreground mb-6">Commencez par ajouter votre premier client.</p>
           <Button asChild size="lg">
             <Link href="/clients/add">
-              <PlusCircle className="mr-2 h-5 w-5" /> Add First Client
+              <PlusCircle className="mr-2 h-5 w-5" /> Ajouter le Premier Client
             </Link>
           </Button>
         </div>

@@ -1,11 +1,22 @@
+
 "use client"
 
 import * as React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
-import { DayPicker } from "react-day-picker"
+import { DayPicker, type CaptionProps } from "react-day-picker"
+import { format } from "date-fns"
+import { fr } from "date-fns/locale"
 
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./select" // Assuming select is in the same directory
+
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
@@ -13,8 +24,17 @@ function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  locale = fr, // Default to French locale
   ...props
 }: CalendarProps) {
+
+  const handleCalendarChange = (
+    _month: Date,
+    form: { क्षमता: (newMonth: Date) => void } // Using a simplified type, adjust if needed
+  ) => {
+    // Not directly used for year/month selection here but part of react-day-picker's API
+  }
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -22,7 +42,6 @@ function Calendar({
       classNames={{
         months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
         month: "space-y-4",
-        caption: "flex justify-center pt-1 relative items-center",
         caption_label: "text-sm font-medium",
         nav: "space-x-1 flex items-center",
         nav_button: cn(
@@ -51,15 +70,36 @@ function Calendar({
         day_range_middle:
           "aria-selected:bg-accent aria-selected:text-accent-foreground",
         day_hidden: "invisible",
+        caption: "flex justify-center pt-1 relative items-center",
         ...classNames,
       }}
+      locale={locale}
       components={{
-        IconLeft: ({ className, ...props }) => (
-          <ChevronLeft className={cn("h-4 w-4", className)} {...props} />
+        IconLeft: ({ className: c, ...rest }) => (
+          <ChevronLeft className={cn("h-4 w-4", c)} {...rest} />
         ),
-        IconRight: ({ className, ...props }) => (
-          <ChevronRight className={cn("h-4 w-4", className)} {...props} />
+        IconRight: ({ className: c, ...rest }) => (
+          <ChevronRight className={cn("h-4 w-4", c)} {...rest} />
         ),
+        Caption: ({ displayMonth, ...rest }: CaptionProps) => {
+          const currentYear = new Date().getFullYear()
+          const years = Array.from(
+            { length: 20 },
+            (_, i) => currentYear - 10 + i
+          ) // Example: 10 years past, 10 years future
+          const months = Array.from({ length: 12 }, (_, i) =>
+            new Date(displayMonth.getFullYear(), i)
+          );
+
+
+          return (
+            <div className="flex justify-between items-center gap-2 px-1">
+               <h2 className="text-sm font-medium">
+                {format(displayMonth, "MMMM yyyy", { locale })}
+              </h2>
+            </div>
+          )
+        },
       }}
       {...props}
     />

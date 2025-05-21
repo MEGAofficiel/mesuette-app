@@ -29,15 +29,15 @@ const prompt = ai.definePrompt({
   name: 'suggestClientNotePrompt',
   input: {schema: SuggestClientNoteInputSchema},
   output: {schema: SuggestClientNoteOutputSchema},
-  prompt: `You are a friendly assistant for a tailor.
-A new client named '{{clientName}}' is being added.
-Write a short, welcoming, and slightly personalized note (1-2 sentences) that the tailor can save for this client.
-Examples:
-- "Welcome, {{clientName}}! Looking forward to creating something great for you."
-- "So happy to have you, {{clientName}}! We'll discuss your project needs soon."
-- "Hello {{clientName}}, welcome to our tailoring service! Excited to start working with you."
+  prompt: `Vous êtes un assistant amical pour un tailleur.
+Un nouveau client nommé '{{clientName}}' est en cours d'ajout.
+Rédigez une note de bienvenue courte, accueillante et légèrement personnalisée (1-2 phrases) que le tailleur pourra enregistrer pour ce client.
+Exemples:
+- "Bienvenue, {{clientName}} ! Au plaisir de créer quelque chose de magnifique pour vous."
+- "Très heureux de vous accueillir, {{clientName}} ! Nous discuterons bientôt des besoins de votre projet."
+- "Bonjour {{clientName}}, bienvenue dans notre service de couture ! Hâte de commencer à travailler avec vous."
 
-Ensure the note is warm and professional.
+Assurez-vous que la note soit chaleureuse et professionnelle.
 `,
 });
 
@@ -51,7 +51,7 @@ const suggestClientNoteFlow = ai.defineFlow(
     const {output} = await prompt(input);
     if (!output) {
       // Fallback or error handling if output is undefined
-      return { note: `Welcome, ${input.clientName}! We're glad to have you.` };
+      return { note: `Bienvenue, ${input.clientName} ! Nous sommes ravis de vous compter parmi nous.` };
     }
     return output;
   }

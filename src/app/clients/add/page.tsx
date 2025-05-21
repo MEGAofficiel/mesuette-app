@@ -18,14 +18,14 @@ export default function AddClientPage() {
     try {
       const newClient = addClient(data);
       toast({
-        title: "Client Added",
-        description: `${newClient.name} has been successfully added.`,
+        title: "Client Ajouté",
+        description: `${newClient.name} a été ajouté avec succès.`,
       });
       router.push(`/clients/${newClient.id}`);
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to add client. Please try again.",
+        title: "Erreur",
+        description: "Échec de l'ajout du client. Veuillez réessayer.",
         variant: "destructive",
       });
       setIsSubmitting(false);
@@ -34,7 +34,7 @@ export default function AddClientPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold tracking-tight">Add New Client</h1>
+      <h1 className="text-3xl font-bold tracking-tight">Ajouter Nouveau Client</h1>
       <ClientForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
     </div>
   );

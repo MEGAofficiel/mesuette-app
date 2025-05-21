@@ -3,11 +3,12 @@
 import type { Measurement } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CalendarDays, Shirt, Drama, Ruler, Trash2 } from 'lucide-react'; // RectangleHorizontal was too generic
+import { CalendarDays, Shirt, Drama, Ruler, Trash2 } from 'lucide-react'; 
 import { format } from 'date-fns';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { useAppContext } from '@/context/app-context';
 import { useToast } from '@/hooks/use-toast';
+import { GARMENT_TYPES, GENDERS, APP_LOCALE } from '@/lib/constants';
 
 interface MeasurementListItemProps {
   measurement: Measurement;
@@ -16,7 +17,7 @@ interface MeasurementListItemProps {
 
 const garmentIcons: Record<Measurement['garmentType'], React.ElementType> = {
   shirt: Shirt,
-  pants: Ruler, // Using Ruler as a generic measurement icon for pants
+  pants: Ruler, 
   dress: Drama,
 };
 
@@ -24,11 +25,18 @@ export function MeasurementListItem({ measurement, onDelete }: MeasurementListIt
   const Icon = garmentIcons[measurement.garmentType] || Ruler;
   const { toast } = useToast();
 
+  const garmentLabel = GARMENT_TYPES.find(gt => gt.id === measurement.garmentType)?.label || measurement.garmentType;
+  const genderLabel = GENDERS.find(g => g.id === measurement.gender)?.label || measurement.gender;
+  
+  const formattedDate = format(new Date(measurement.date), "PPP", { locale: APP_LOCALE });
+  const formattedTime = format(new Date(measurement.date), "p", { locale: APP_LOCALE });
+
+
   const handleDelete = () => {
     onDelete(measurement.id);
     toast({
-      title: "Measurement Deleted",
-      description: `Measurement from ${format(new Date(measurement.date), "PPP")} has been deleted.`,
+      title: "Mesure Supprimée",
+      description: `La mesure du ${format(new Date(measurement.date), "PPP", { locale: APP_LOCALE })} a été supprimée.`,
     });
   };
 
@@ -37,19 +45,19 @@ export function MeasurementListItem({ measurement, onDelete }: MeasurementListIt
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-lg">
           <Icon className="h-5 w-5 text-primary" />
-          {measurement.garmentType.charAt(0).toUpperCase() + measurement.garmentType.slice(1)} - {measurement.gender.charAt(0).toUpperCase() + measurement.gender.slice(1)}
+          {garmentLabel} - {genderLabel}
         </CardTitle>
         <CardDescription className="flex items-center gap-1 text-xs">
           <CalendarDays className="h-3 w-3" />
-          {format(new Date(measurement.date), "MMMM d, yyyy 'at' h:mm a")}
+          {formattedDate} à {formattedTime}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <p className="text-sm text-muted-foreground truncate">
-          {measurement.notes || "No specific notes for this measurement."}
+          {measurement.notes || "Aucune note spécifique pour cette mesure."}
         </p>
         <details className="mt-2 text-xs">
-          <summary className="cursor-pointer text-primary hover:underline">View Measurements</summary>
+          <summary className="cursor-pointer text-primary hover:underline">Voir les Mesures</summary>
           <ul className="mt-1 pl-4 list-disc list-inside bg-accent/30 p-2 rounded-md">
             {Object.entries(measurement.measurements).map(([key, value]) => (
               <li key={key}>
@@ -63,19 +71,19 @@ export function MeasurementListItem({ measurement, onDelete }: MeasurementListIt
          <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="destructive" size="sm">
-                <Trash2 className="mr-2 h-4 w-4" /> Delete
+                <Trash2 className="mr-2 h-4 w-4" /> Supprimer
               </Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogTitle>Êtes-vous sûr ?</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete this measurement record.
+                  Cette action est irréversible. Cela supprimera définitivement cet enregistrement de mesure.
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+                <AlertDialogCancel>Annuler</AlertDialogCancel>
+                <AlertDialogAction onClick={handleDelete}>Supprimer</AlertDialogAction>
               </AlertDialogFooter>
             </AlertDialogContent>
           </AlertDialog>
