@@ -1,20 +1,29 @@
 
 "use client";
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { Loader2 } from 'lucide-react';
+
+// Nous allons afficher un contenu simple pour tester le rendu de base et le thème.
+// Les imports pour useRouter, useEffect, Loader2 ne sont plus nécessaires pour cette version de test.
 
 export default function HomePage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace('/clients');
-  }, [router]);
-
   return (
-    <div className="flex h-[calc(100vh-10rem)] items-center justify-center">
-      <Loader2 className="h-12 w-12 animate-spin text-primary" />
-      <p className="ml-4 text-lg">Chargement de Mesuette...</p>
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-background">
+      <div className="text-center">
+        <h1 className="text-4xl font-bold text-primary mb-4">
+          Mesuette
+        </h1>
+        <p className="text-xl text-foreground mb-2">
+          Application de gestion des mesures pour tailleurs.
+        </p>
+        <p className="text-md text-muted-foreground mb-6">
+          Si vous voyez cette page avec un fond clair et du texte lisible, les styles de base fonctionnent.
+        </p>
+        <a 
+          href="/clients" 
+          className="inline-block px-6 py-3 mt-4 text-lg font-medium text-primary-foreground bg-primary rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+        >
+          Accéder à la liste des clients
+        </a>
+      </div>
     </div>
   );
 }
