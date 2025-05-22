@@ -6,9 +6,9 @@
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-background">
+    <div className="flex flex-col items-center justify-center h-full p-4 bg-background">
       <div className="text-center">
-        <h1 className="text-4xl font-bold text-primary mb-4">
+        <h1 className="text-4xl font-bold text-foreground mb-4">
           Mesuette
         </h1>
         <p className="text-xl text-foreground mb-2">
@@ -17,8 +17,8 @@ export default function HomePage() {
         <p className="text-md text-muted-foreground mb-6">
           Si vous voyez cette page avec un fond clair et du texte lisible, les styles de base fonctionnent.
         </p>
-        <a 
-          href="/clients" 
+        <a
+          href="/clients"
           className="inline-block px-6 py-3 mt-4 text-lg font-medium text-primary-foreground bg-primary rounded-md hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
         >
           Accéder à la liste des clients
