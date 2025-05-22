@@ -11,12 +11,12 @@ export default function Navbar() {
   const isMobile = useIsMobile();
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex flex-col">
           <Link href="/" className="flex items-center gap-2">
             <Scissors className="h-7 w-7 text-primary" />
-            <span className="text-xl font-bold">Mesuette</span>
+            <span className="text-xl font-bold text-foreground">Mesuette</span>
           </Link>
           <p className="text-xs text-muted-foreground ml-[2.25rem] -mt-1">
             Gestion de mesures client pour tailleurs.
