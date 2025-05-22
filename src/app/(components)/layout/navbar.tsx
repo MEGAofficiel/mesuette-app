@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, Scissors } from 'lucide-react';
+import { Menu, Scissors, TapeMeasure } from 'lucide-react'; // Ajout de TapeMeasure
 import { SidebarNav } from './sidebar-nav';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -16,9 +16,10 @@ export default function Navbar() {
         <div className="flex flex-col">
           <Link href="/" className="flex items-center gap-2">
             <Scissors className="h-7 w-7 text-primary" />
-            <span className="text-xl font-bold text-foreground">Mesuette</span>
+            <TapeMeasure className="h-7 w-7 text-primary" /> {/* Icône Mètre Ruban ajoutée */}
+            <span className="text-xl font-bold text-foreground ml-1">Mesuette</span>
           </Link>
-          <p className="text-xs text-muted-foreground ml-[2.25rem] -mt-1">
+          <p className="text-xs text-muted-foreground ml-[4.25rem] -mt-1"> {/* Ajustement du ml pour aligner */}
             Gestion de mesures client pour tailleurs.
           </p>
         </div>
