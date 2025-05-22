@@ -24,6 +24,7 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import type { Measurement } from '@/lib/types';
 
 // Base schema for dynamic fields
 const measurementValueSchema = z.string().refine(val => !isNaN(parseFloat(val)) && parseFloat(val) > 0, {
@@ -47,7 +48,7 @@ type MeasurementFormValues = z.infer<typeof measurementFormSchema>;
 
 interface MeasurementFormProps {
   clientId: string;
-  onSubmit: (data: MeasurementFormValues) => void;
+  onSubmit: (data: Omit<Measurement, 'id' | 'clientId'>) => void;
   isSubmitting?: boolean;
 }
 
@@ -71,8 +72,7 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
     if (watchedGarmentType && watchedGender) {
       const fields = getMeasurementFields(watchedGarmentType, watchedGender);
       setCurrentMeasurementFields(fields);
-      // Reset measurements field when garment/gender changes to avoid stale data
-      // or to initialize if new fields appear
+      // Reset measurements field when garment/gender changes
       const newMeasurements: Record<string, string> = {};
       fields.forEach(field => {
         newMeasurements[field] = form.getValues(`measurements.${field}`) || "";
@@ -84,7 +84,7 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
       form.setValue("measurements", {}, { shouldValidate: true });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [watchedGarmentType, watchedGender, form.setValue, form.getValues]); // form.setValue and form.getValues are stable
+  }, [watchedGarmentType, watchedGender, form.setValue, form.getValues]);
 
 
   const processAndSubmit = (data: MeasurementFormValues) => {

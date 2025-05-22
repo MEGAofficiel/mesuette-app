@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { CalendarDays, Shirt, Drama, Ruler, Trash2, PencilLine } from 'lucide-react'; 
 import { format } from 'date-fns';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { useAppContext } from '@/context/app-context';
 import { useToast } from '@/hooks/use-toast';
 import { GARMENT_TYPES, GENDERS, APP_LOCALE } from '@/lib/constants';
 
@@ -19,11 +18,11 @@ const garmentIcons: Record<Measurement['garmentType'], React.ElementType> = {
   shirt: Shirt,
   pants: Ruler, 
   dress: Drama,
-  other: PencilLine, // Icône pour "Autre"
+  other: PencilLine, 
 };
 
 export function MeasurementListItem({ measurement, onDelete }: MeasurementListItemProps) {
-  const Icon = garmentIcons[measurement.garmentType] || Ruler; // Fallback à Ruler si non trouvé
+  const Icon = garmentIcons[measurement.garmentType] || Ruler; 
   const { toast } = useToast();
 
   const garmentLabel = GARMENT_TYPES.find(gt => gt.id === measurement.garmentType)?.label || measurement.garmentType;

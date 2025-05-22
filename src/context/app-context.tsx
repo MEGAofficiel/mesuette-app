@@ -1,9 +1,8 @@
 
 "use client";
 import type React from 'react';
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState } from 'react';
 import type { Client, Measurement } from '@/lib/types';
-import { GARMENT_TYPES, GENDERS } from '@/lib/constants'; // For initial data labels if needed
 
 interface AppContextType {
   clients: Client[];
@@ -19,35 +18,18 @@ interface AppContextType {
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-// Using French labels for initial data where applicable
 const initialClients: Client[] = [];
-
 const initialMeasurements: Measurement[] = [];
 
-
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [clients, setClients] = useState<Client[]>([]);
-  const [measurements, setMeasurements] = useState<Measurement[]>([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    // Simulate loading from local storage or API for persistence demonstration
-    // For now, just use initial data
-    setClients(initialClients);
-    setMeasurements(initialMeasurements);
-    setIsLoaded(true);
-  }, []);
-
-
-  if (!isLoaded) {
-    return null; // Or a loading spinner
-  }
+  const [clients, setClients] = useState<Client[]>(initialClients);
+  const [measurements, setMeasurements] = useState<Measurement[]>(initialMeasurements);
 
   const addClient = (clientData: Omit<Client, 'id' | 'createdAt'>): Client => {
-    const newClient: Client = { 
-      ...clientData, 
-      id: String(Date.now() + Math.random()), 
-      createdAt: new Date().toISOString() 
+    const newClient: Client = {
+      ...clientData,
+      id: String(Date.now() + Math.random()),
+      createdAt: new Date().toISOString()
     };
     setClients(prev => [...prev, newClient]);
     return newClient;
@@ -70,10 +52,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const getMeasurementsByClientId = (clientId: string): Measurement[] => {
     return measurements.filter(m => m.clientId === clientId).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   };
-  
+
   const deleteClient = (clientId: string) => {
     setClients(prev => prev.filter(c => c.id !== clientId));
-    setMeasurements(prev => prev.filter(m => m.clientId !== clientId)); // Also delete associated measurements
+    setMeasurements(prev => prev.filter(m => m.clientId !== clientId));
   };
 
   const deleteMeasurement = (measurementId: string) => {
@@ -94,4 +76,3 @@ export const useAppContext = (): AppContextType => {
   }
   return context;
 };
-
