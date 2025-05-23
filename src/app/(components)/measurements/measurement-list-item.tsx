@@ -4,13 +4,14 @@ import type { Measurement, MeasurementStatus } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { CalendarDays, Shirt, Drama, Ruler, Trash2, Pencil, PlayCircle, CheckCircle2, Truck } from 'lucide-react';
+import { CalendarDays, Shirt, Drama, Ruler, Trash2, Pencil, CheckCircle2, Truck } from 'lucide-react'; // Removed PlayCircle as it wasn't used
 import { format } from 'date-fns';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { GARMENT_TYPES, GENDERS, APP_LOCALE, MEASUREMENT_STATUSES } from '@/lib/constants';
 import Link from 'next/link';
-import { useAppContext } from '@/context/app-context'; // Ajout useAppContext
+import { useAppContext } from '@/context/app-context';
+import { cn } from '@/lib/utils'; // Added missing import
 
 interface MeasurementListItemProps {
   measurement: Measurement;
@@ -25,7 +26,7 @@ const garmentIcons: Record<Measurement['garmentType'], React.ElementType> = {
 };
 
 export function MeasurementListItem({ measurement, onDelete }: MeasurementListItemProps) {
-  const { updateMeasurementStatus } = useAppContext(); // Utilisation du contexte
+  const { updateMeasurementStatus } = useAppContext();
   const Icon = garmentIcons[measurement.garmentType] || Ruler; 
   const { toast } = useToast();
 
