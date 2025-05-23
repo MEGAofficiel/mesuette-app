@@ -3,11 +3,12 @@
 import type { Measurement } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CalendarDays, Shirt, Drama, Ruler, Trash2, PencilLine } from 'lucide-react'; 
+import { CalendarDays, Shirt, Drama, Ruler, Trash2, PencilLine, Pencil } from 'lucide-react'; // Ajout de Pencil
 import { format } from 'date-fns';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { GARMENT_TYPES, GENDERS, APP_LOCALE } from '@/lib/constants';
+import Link from 'next/link'; // Ajout de Link
 
 interface MeasurementListItemProps {
   measurement: Measurement;
@@ -71,7 +72,12 @@ export function MeasurementListItem({ measurement, onDelete }: MeasurementListIt
            garmentLabel !== 'Autre' && <p className="mt-2 text-xs text-muted-foreground">Aucune mesure spécifique enregistrée.</p>
         )}
       </CardContent>
-      <CardFooter className="flex justify-end">
+      <CardFooter className="flex justify-end gap-2"> {/* Ajout de gap-2 pour espacer les boutons */}
+         <Button asChild variant="outline" size="sm">
+            <Link href={`/clients/${measurement.clientId}/measurements/${measurement.id}/edit`}>
+              <Pencil className="mr-2 h-4 w-4" /> Modifier
+            </Link>
+          </Button>
          <AlertDialog>
             <AlertDialogTrigger asChild>
               <Button variant="destructive" size="sm">

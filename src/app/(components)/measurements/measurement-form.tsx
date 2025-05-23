@@ -1,7 +1,7 @@
 
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -27,8 +27,12 @@ import { useEffect, useState } from "react";
 import type { Measurement } from '@/lib/types';
 
 // Base schema for dynamic fields
-const measurementValueSchema = z.string().refine(val => !isNaN(parseFloat(val)) && parseFloat(val) > 0, {
-  message: "Doit être un nombre positif.",
+const measurementValueSchema = z.string().refine(val => {
+  if (val === "" || val === undefined || val === null) return true; // Allow empty strings
+  const num = parseFloat(val);
+  return !isNaN(num) && num >= 0; // Allow 0 and positive numbers
+}, {
+  message: "Doit être un nombre positif ou zéro.",
 }).optional().or(z.literal(''));
 
 
@@ -41,27 +45,52 @@ const measurementFormSchema = z.object({
     required_error: "Veuillez sélectionner un sexe.",
   }),
   notes: z.string().optional(),
-  measurements: z.record(measurementValueSchema), // Dynamic fields
+  measurements: z.record(measurementValueSchema), 
 });
 
-type MeasurementFormValues = z.infer<typeof measurementFormSchema>;
+export type MeasurementFormValues = z.infer<typeof measurementFormSchema>;
 
-interface MeasurementFormProps {
-  clientId: string;
-  onSubmit: (data: Omit<Measurement, 'id' | 'clientId'>) => void;
-  isSubmitting?: boolean;
-}
-
-export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: MeasurementFormProps) {
-  const form = useForm<MeasurementFormValues>({
-    resolver: zodResolver(measurementFormSchema),
-    defaultValues: {
+// Helper to convert Measurement to MeasurementFormValues
+export const measurementToFormValues = (measurement?: Measurement | null): Partial<MeasurementFormValues> => {
+  if (!measurement) {
+    return {
       date: new Date(),
       garmentType: undefined,
       gender: undefined,
       notes: "",
       measurements: {},
-    },
+    };
+  }
+  return {
+    date: new Date(measurement.date),
+    garmentType: measurement.garmentType,
+    gender: measurement.gender,
+    notes: measurement.notes || "",
+    measurements: Object.fromEntries(
+      Object.entries(measurement.measurements).map(([key, value]) => [key, String(value)])
+    ),
+  };
+};
+
+
+interface MeasurementFormProps {
+  onSubmit: (data: MeasurementFormValues) => void;
+  isSubmitting?: boolean;
+  initialData?: Partial<MeasurementFormValues>;
+  formTitle?: string;
+  submitButtonText?: string;
+}
+
+export function MeasurementForm({ 
+    onSubmit, 
+    isSubmitting = false, 
+    initialData,
+    formTitle = "Ajouter une nouvelle prise de mesures",
+    submitButtonText = "Enregistrer les mesures"
+}: MeasurementFormProps) {
+  const form = useForm<MeasurementFormValues>({
+    resolver: zodResolver(measurementFormSchema),
+    defaultValues: initialData || measurementToFormValues(null),
   });
 
   const watchedGarmentType = form.watch("garmentType");
@@ -69,13 +98,27 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
   const [currentMeasurementFields, setCurrentMeasurementFields] = useState<string[]>([]);
 
   useEffect(() => {
+    // When initialData is available (editing mode), set garmentType and gender if they exist
+    // This ensures the form is correctly initialized when initialData changes or is first set
+    if (initialData?.garmentType && initialData?.gender) {
+        form.setValue("garmentType", initialData.garmentType, { shouldDirty: true, shouldValidate: true });
+        form.setValue("gender", initialData.gender, { shouldDirty: true, shouldValidate: true });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialData?.garmentType, initialData?.gender, form.setValue]);
+
+
+  useEffect(() => {
     if (watchedGarmentType && watchedGender) {
       const fields = getMeasurementFields(watchedGarmentType, watchedGender);
       setCurrentMeasurementFields(fields);
-      // Reset measurements field when garment/gender changes
-      const newMeasurements: Record<string, string> = {};
+      
+      // Preserve existing measurements if fields are still relevant, otherwise reset
+      const newMeasurements: Record<string, string | undefined> = {};
+      const existingMeasurements = form.getValues("measurements");
+
       fields.forEach(field => {
-        newMeasurements[field] = form.getValues(`measurements.${field}`) || "";
+        newMeasurements[field] = existingMeasurements?.[field] || initialData?.measurements?.[field] || "";
       });
       form.setValue("measurements", newMeasurements, { shouldValidate: true });
 
@@ -84,28 +127,24 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
       form.setValue("measurements", {}, { shouldValidate: true });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [watchedGarmentType, watchedGender, form.setValue, form.getValues]);
+  }, [watchedGarmentType, watchedGender, form.setValue, form.getValues, initialData?.measurements]);
+  
+  // Reset form when initialData changes (e.g., navigating between edit pages or from add to edit)
+  useEffect(() => {
+    form.reset(initialData || measurementToFormValues(null));
+  }, [initialData, form.reset, form]);
 
 
   const processAndSubmit = (data: MeasurementFormValues) => {
-    const processedData = {
-      ...data,
-      measurements: Object.fromEntries(
-        Object.entries(data.measurements)
-          .filter(([, value]) => value && value.trim() !== "") // Filter out empty strings
-          .map(([key, value]) => [key, parseFloat(value as string)]) // Convert to number
-      ),
-      date: data.date.toISOString(), // Convert date to ISO string
-    };
-    // @ts-ignore // We've transformed the data, TS might complain but it's intended
-    onSubmit(processedData);
+    // The parent component will handle converting MeasurementFormValues to Measurement type
+    onSubmit(data);
   };
 
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Ajouter une nouvelle prise de mesures</CardTitle>
+        <CardTitle>{formTitle}</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -159,7 +198,7 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Type de vêtement</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Sélectionner un type de vêtement" />
@@ -181,7 +220,7 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Sexe pour la coupe</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Sélectionner un sexe" />
@@ -257,8 +296,8 @@ export function MeasurementForm({ clientId, onSubmit, isSubmitting = false }: Me
                  <FormDescription className="text-sm text-muted-foreground">Pour le type "Autre", utilisez le champ "Notes sur les mesures" ci-dessus pour enregistrer les détails.</FormDescription>
             )}
 
-            <Button type="submit" disabled={isSubmitting || (!form.formState.isValid || ((currentMeasurementFields.length === 0 && watchedGarmentType !== 'other' && watchedGarmentType && watchedGender)) )}>
-              {isSubmitting ? "Enregistrement..." : "Enregistrer les mesures"}
+            <Button type="submit" disabled={isSubmitting || (!form.formState.isValid || ((currentMeasurementFields.length === 0 && watchedGarmentType !== 'other' && !!watchedGarmentType && !!watchedGender)) )}>
+              {isSubmitting ? "Enregistrement..." : submitButtonText}
             </Button>
           </form>
         </Form>
