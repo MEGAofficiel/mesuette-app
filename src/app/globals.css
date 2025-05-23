@@ -46,14 +46,14 @@ body {
     --radius: 0.5rem;
 
     /* Sidebar specific theme variables - Light Theme */
-    --sidebar-background: 210 22% 96%; /* Gris perle #F4F6F8 */
-    --sidebar-foreground: 220 15% 25%; 
-    --sidebar-primary: 250 60% 65%; 
-    --sidebar-primary-foreground: 0 0% 100%; 
-    --sidebar-accent: 250 60% 97%; /* Very light lavender for hover */
-    --sidebar-accent-foreground: 250 40% 30%; 
-    --sidebar-border: 220 15% 85%; 
-    --sidebar-ring: 180 40% 50%; 
+    --sidebar-background: 220 15% 93%; /* Slightly darker cool gray for separation */
+    --sidebar-foreground: 220 15% 25%; /* Matches main foreground */
+    --sidebar-primary: 250 60% 65%; /* Matches main primary for active items */
+    --sidebar-primary-foreground: 0 0% 100%; /* Matches main primary-foreground */
+    --sidebar-accent: 220 15% 89%; /* Subtle darker background for hover */
+    --sidebar-accent-foreground: 220 15% 20%; /* Darker text for on-hover items */
+    --sidebar-border: 220 15% 88%; /* Matches main border for consistency */
+    --sidebar-ring: 180 40% 50%; /* Matches main ring/accent */
   }
 
   .dark {
