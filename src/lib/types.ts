@@ -1,4 +1,7 @@
+
 import type { GarmentType, Gender } from './constants';
+
+export type MeasurementStatus = 'inProgress' | 'completed' | 'delivered';
 
 export interface Client {
   id: string;
@@ -17,4 +20,5 @@ export interface Measurement {
   gender: Gender;
   measurements: Record<string, number | string>; // Store as string initially from form, convert to number where applicable
   notes?: string;
+  status: MeasurementStatus; // Nouveau champ pour le statut
 }

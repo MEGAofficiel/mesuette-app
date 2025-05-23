@@ -2,7 +2,7 @@
 "use client";
 import type React from 'react';
 import { createContext, useContext, useState, useCallback, useMemo } from 'react';
-import type { Client, Measurement } from '@/lib/types';
+import type { Client, Measurement, MeasurementStatus } from '@/lib/types'; // Ajout de MeasurementStatus
 
 interface AppContextType {
   clients: Client[];
@@ -10,12 +10,13 @@ interface AppContextType {
   addClient: (client: Omit<Client, 'id' | 'createdAt'>) => Client;
   updateClient: (client: Client) => void;
   getClientById: (id: string) => Client | undefined;
-  addMeasurement: (measurement: Omit<Measurement, 'id'>) => Measurement;
+  addMeasurement: (measurement: Omit<Measurement, 'id' | 'status'>) => Measurement; // status sera géré en interne
   getMeasurementsByClientId: (clientId: string) => Measurement[];
-  getMeasurementById: (measurementId: string) => Measurement | undefined; // Nouvelle fonction
-  updateMeasurement: (updatedMeasurement: Measurement) => void; // Nouvelle fonction
+  getMeasurementById: (measurementId: string) => Measurement | undefined;
+  updateMeasurement: (updatedMeasurement: Measurement) => void;
   deleteClient: (clientId: string) => void;
   deleteMeasurement: (measurementId: string) => void;
+  updateMeasurementStatus: (measurementId: string, status: MeasurementStatus) => void; // Nouvelle fonction
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -42,8 +43,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return clients.find(c => c.id === id);
   }, [clients]);
 
-  const addMeasurement = useCallback((measurementData: Omit<Measurement, 'id'>): Measurement => {
-    const newMeasurement: Measurement = { ...measurementData, id: String(Date.now() + Math.random()) };
+  const addMeasurement = useCallback((measurementData: Omit<Measurement, 'id' | 'status'>): Measurement => {
+    const newMeasurement: Measurement = { 
+      ...measurementData, 
+      id: String(Date.now() + Math.random()),
+      status: 'inProgress' // Statut par défaut
+    };
     setMeasurements(prev => [...prev, newMeasurement]);
     return newMeasurement;
   }, []);
@@ -58,6 +63,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const updateMeasurement = useCallback((updatedMeasurement: Measurement) => {
     setMeasurements(prev => prev.map(m => m.id === updatedMeasurement.id ? updatedMeasurement : m));
+  }, []);
+
+  const updateMeasurementStatus = useCallback((measurementId: string, status: MeasurementStatus) => {
+    setMeasurements(prev => prev.map(m => m.id === measurementId ? { ...m, status } : m));
   }, []);
 
   const deleteClient = useCallback((clientId: string) => {
@@ -80,11 +89,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     getMeasurementById,
     updateMeasurement,
     deleteClient,
-    deleteMeasurement
+    deleteMeasurement,
+    updateMeasurementStatus // Ajout de la nouvelle fonction
   }), [
     clients, measurements, addClient, updateClient, getClientById, 
     addMeasurement, getMeasurementsByClientId, getMeasurementById, 
-    updateMeasurement, deleteClient, deleteMeasurement
+    updateMeasurement, deleteClient, deleteMeasurement, updateMeasurementStatus // Ajout de la dépendance
   ]);
 
   return (

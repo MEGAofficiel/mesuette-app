@@ -1,6 +1,7 @@
 
 import type { Locale } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import type { MeasurementStatusId } from './types'; // Import corrigé vers MeasurementStatusId (sera défini dans types.ts ou ici)
 
 export const APP_LOCALE: Locale = fr;
 
@@ -8,7 +9,7 @@ export const GARMENT_TYPES = [
   { id: 'shirt', label: 'Chemise' },
   { id: 'pants', label: 'Pantalon' },
   { id: 'dress', label: 'Robe' },
-  { id: 'other', label: 'Autre' }, // Ajout de l'option "Autre"
+  { id: 'other', label: 'Autre' },
 ] as const;
 
 export const GENDERS = [
@@ -19,7 +20,6 @@ export const GENDERS = [
 export type GarmentType = (typeof GARMENT_TYPES)[number]['id'];
 export type Gender = (typeof GENDERS)[number]['id'];
 
-// Define specific fields for each garment type and gender
 export const MEASUREMENT_FIELDS_CONFIG: Record<
   GarmentType,
   { common: string[]; male: string[]; female: string[] }
@@ -74,7 +74,7 @@ export const MEASUREMENT_FIELDS_CONFIG: Record<
       'Tour de Biceps',
       'Tour de Poignet',
     ],
-    male: [], // Typically not applicable for dresses, but can be extended if needed
+    male: [], 
     female: [
       'Tour de Buste',
       'Dessous de Poitrine',
@@ -90,7 +90,7 @@ export const MEASUREMENT_FIELDS_CONFIG: Record<
       'Hauteur Genou',
     ],
   },
-  other: { // Configuration pour "Autre"
+  other: { 
     common: [],
     male: [],
     female: [],
@@ -107,6 +107,19 @@ export function getMeasurementFields(garmentType: GarmentType, gender: Gender): 
   } else if (gender === 'female' && config.female) {
     fields = [...fields, ...config.female];
   }
-  // Remove duplicates that might arise if a field is in common and gender-specific
   return Array.from(new Set(fields));
 }
+
+// Définition des statuts de mesure/commande
+export const MEASUREMENT_STATUSES = {
+  inProgress: { label: 'En cours', badgeVariant: 'outline' as const, badgeClassName: 'border-blue-500 text-blue-500' },
+  completed: { label: 'Terminé', badgeVariant: 'secondary' as const, badgeClassName: 'bg-green-100 text-green-700 border-green-300' },
+  delivered: { label: 'Livré', badgeVariant: 'default' as const, badgeClassName: 'bg-purple-600 text-purple-50 hover:bg-purple-700' },
+} as const;
+
+// Assurez-vous que MeasurementStatusId est exporté depuis types.ts ou défini ici si nécessaire.
+// Pour l'instant, MeasurementStatusId est un alias pour MeasurementStatus de types.ts dans mon raisonnement.
+// Si vous voulez utiliser MeasurementStatusId ici, vous pouvez le typer comme:
+// export type MeasurementStatusId = keyof typeof MEASUREMENT_STATUSES;
+// Mais il est préférable que MeasurementStatus (le type union) vienne de types.ts
+// et que MEASUREMENT_STATUSES soit juste un objet de configuration.

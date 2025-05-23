@@ -9,6 +9,7 @@ import type { Measurement } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, UserX, FileQuestion } from 'lucide-react';
 import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 export default function EditMeasurementPage() {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function EditMeasurementPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [initialFormValues, setInitialFormValues] = useState<Partial<MeasurementFormValues> | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
+  const [originalMeasurement, setOriginalMeasurement] = useState<Measurement | null | undefined>(undefined);
 
   const clientId = typeof params.id === 'string' ? params.id : '';
   const measurementId = typeof params.measurementId === 'string' ? params.measurementId : '';
@@ -28,9 +30,10 @@ export default function EditMeasurementPage() {
     if (measurementId) {
       const measurementData = getMeasurementById(measurementId);
       if (measurementData) {
+        setOriginalMeasurement(measurementData); // Sauvegarde de la mesure originale pour le statut
         setInitialFormValues(measurementToFormValues(measurementData));
       } else {
-        setInitialFormValues(undefined); // Measurement not found
+        setInitialFormValues(undefined); 
         toast({
           title: "Mesure non trouvée",
           description: "Impossible de charger les données de la mesure pour modification.",
@@ -82,13 +85,16 @@ export default function EditMeasurementPage() {
   }
 
   const handleSubmit = (data: MeasurementFormValues) => {
+    if (!originalMeasurement) {
+        toast({ title: "Erreur", description: "Données originales de mesure non trouvées.", variant: "destructive"});
+        return;
+    }
     setIsSubmitting(true);
     try {
-      // Convert form values back to Measurement type
       const processedMeasurements: Record<string, number> = {};
       for (const [key, value] of Object.entries(data.measurements)) {
-        if (value && value.trim() !== "") {
-          processedMeasurements[key] = parseFloat(value as string);
+        if (value && String(value).trim() !== "") {
+          processedMeasurements[key] = parseFloat(String(value));
         }
       }
 
@@ -100,6 +106,7 @@ export default function EditMeasurementPage() {
         gender: data.gender,
         measurements: processedMeasurements,
         notes: data.notes,
+        status: originalMeasurement.status, // Préserver le statut original
       };
       
       updateMeasurement(updatedMeasurementData);
