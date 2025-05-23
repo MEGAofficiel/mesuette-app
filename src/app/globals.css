@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -45,7 +46,7 @@ body {
     --radius: 0.5rem;
 
     /* Sidebar specific theme variables - Light Theme */
-    --sidebar-background: 220 20% 96%; /* Slightly differentiated from main background */
+    --sidebar-background: 210 22% 96%; /* Gris perle #F4F6F8 */
     --sidebar-foreground: 220 15% 25%; 
     --sidebar-primary: 250 60% 65%; 
     --sidebar-primary-foreground: 0 0% 100%; 
