@@ -11,7 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { GARMENT_TYPES, GENDERS, APP_LOCALE, MEASUREMENT_STATUSES } from '@/lib/constants';
 import Link from 'next/link';
 import { useAppContext } from '@/context/app-context';
-import { cn } from '@/lib/utils'; // Added missing import
+import { cn } from '@/lib/utils';
 
 interface MeasurementListItemProps {
   measurement: Measurement;
