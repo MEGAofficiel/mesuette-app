@@ -3,9 +3,10 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from '@/components/ui/sheet';
-import { Menu, Scissors, Ruler } from 'lucide-react'; // Remplacé TapeMeasure par Ruler
+import { Menu } from 'lucide-react';
 import { SidebarNav } from './sidebar-nav';
 import { useIsMobile } from '@/hooks/use-mobile';
+import Image from 'next/image';
 
 export default function Navbar() {
   const isMobile = useIsMobile();
@@ -14,12 +15,17 @@ export default function Navbar() {
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
       <div className="container flex h-16 items-center justify-between">
         <div className="flex flex-col">
-          <Link href="/" className="flex items-center gap-2">
-            <Scissors className="h-7 w-7 text-primary" />
-            <Ruler className="h-7 w-7 text-primary" /> {/* Icône Règle ajoutée */}
-            <span className="text-xl font-bold text-foreground ml-1">Mesuette</span>
+           <Link href="/" className="flex items-center gap-2">
+            <Image 
+              src="https://storage.googleapis.com/project-os-frontend/codellama-v1/images/mesuette/4252a160-c328-4f10-ad27-9c988b4ef84c.png"
+              alt="Mesuette Logo"
+              width={32}
+              height={32}
+              className="h-8 w-8"
+            />
+            <span className="text-xl font-bold text-foreground">Mesuette</span>
           </Link>
-          <p className="text-xs text-muted-foreground ml-[4.25rem] -mt-1"> {/* Ajustement du ml pour aligner */}
+          <p className="text-xs text-muted-foreground ml-[2.75rem] -mt-1.5">
             Gestion de mesures client pour tailleurs.
           </p>
         </div>
