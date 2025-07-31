@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#f4f6f8', // Correspond à notre fond gris perle
+  themeColor: '#E6E6FA', 
 };
 
 

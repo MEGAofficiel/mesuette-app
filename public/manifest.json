@@ -2,20 +2,21 @@
   "name": "Mesuette",
   "short_name": "Mesuette",
   "description": "Gestion des mesures client pour tailleurs.",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#f4f6f8",
   "icons": [
     {
-      "src": "/icons/icon-192x192.svg",
+      "src": "/icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/svg+xml"
+      "type": "image/png"
     },
     {
-      "src": "/icons/icon-512x512.svg",
+      "src": "/icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml"
+      "type": "image/png"
     }
-  ]
+  ],
+  "theme_color": "#E6E6FA",
+  "background_color": "#F0F0F0",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait"
 }
