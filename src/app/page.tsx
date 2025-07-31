@@ -16,7 +16,7 @@ export default function HomePage() {
             width={120} 
             height={120}
             className="mx-auto mb-6 rounded-full shadow-lg"
-            data-ai-hint="tailor logo"
+            data-ai-hint="tailor measuring client"
           />
           <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-4 tracking-tight">
             Bienvenue sur Mesuette
