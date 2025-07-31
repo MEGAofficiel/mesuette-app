@@ -2,7 +2,7 @@
 "use client";
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Menu, Scissors, Ruler } from 'lucide-react'; // Remplacé TapeMeasure par Ruler
 import { SidebarNav } from './sidebar-nav';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -33,6 +33,8 @@ export default function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-72 p-0 pt-8">
+               <SheetTitle className="sr-only">Menu principal</SheetTitle>
+               <SheetDescription className="sr-only">Naviguez à travers les différentes sections de l'application.</SheetDescription>
               <SidebarNav isMobile={true} />
             </SheetContent>
           </Sheet>
