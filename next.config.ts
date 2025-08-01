@@ -6,7 +6,7 @@ const withPWA = withPWAInit({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development',
+  disable: false, // PWA is always enabled
 });
 
 
@@ -33,6 +33,9 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+  },
+  experimental: {
+    allowedDevOrigins: ["https://9003-firebase-studio-1747716297404.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev"],
   },
 };
 
