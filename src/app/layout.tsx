@@ -15,10 +15,29 @@ const geistMono = Geist_Mono({
   subsets: ['latin'],
 });
 
+const APP_NAME = "Mesuette";
+const APP_DESCRIPTION = "Gestion des mesures client pour tailleurs.";
+
 export const metadata: Metadata = {
-  title: 'Mesuette',
-  description: 'Gestion des mesures client pour tailleurs.',
+  applicationName: APP_NAME,
+  title: {
+    default: APP_NAME,
+    template: `%s - ${APP_NAME}`,
+  },
+  description: APP_DESCRIPTION,
   manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: APP_NAME,
+  },
+  formatDetection: {
+    telephone: false,
+  },
+  icons: {
+    shortcut: '/favicon.ico',
+    apple: [{ url: '/icons/apple-touch-icon.png', sizes: '180x180' }],
+  },
 };
 
 export const viewport: Viewport = {
