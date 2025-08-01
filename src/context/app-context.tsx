@@ -3,7 +3,7 @@
 import type React from 'react';
 import { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import { collection, onSnapshot, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, query, orderBy, where, getDocs } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
+import { getDb } from '@/lib/firebase'; // Utiliser le getter
 import type { Client, Measurement, MeasurementStatus } from '@/lib/types';
 
 interface AppContextType {
@@ -31,6 +31,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Real-time listener for clients
   useEffect(() => {
+    const db = getDb();
     const q = query(collection(db, "clients"), orderBy("createdAt", "desc"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const clientsData = querySnapshot.docs.map(doc => ({
@@ -49,6 +50,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   
   // Real-time listener for measurements
   useEffect(() => {
+    const db = getDb();
     const q = query(collection(db, "measurements"), orderBy("date", "desc"));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
       const measurementsData = querySnapshot.docs.map(doc => ({
@@ -64,6 +66,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   const addClient = useCallback(async (clientData: Omit<Client, 'id' | 'createdAt'>): Promise<Client> => {
+    const db = getDb();
     const docRef = await addDoc(collection(db, "clients"), {
       ...clientData,
       createdAt: serverTimestamp(),
@@ -72,6 +75,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   const updateClient = useCallback(async (updatedClient: Partial<Client> & { id: string }) => {
+    const db = getDb();
     const clientRef = doc(db, "clients", updatedClient.id);
     await updateDoc(clientRef, updatedClient);
   }, []);
@@ -81,6 +85,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [clients]);
 
   const addMeasurement = useCallback(async (measurementData: Omit<Measurement, 'id' | 'status'>): Promise<Measurement> => {
+    const db = getDb();
     const docRef = await addDoc(collection(db, "measurements"), { 
       ...measurementData, 
       status: 'inProgress' 
@@ -97,16 +102,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, [measurements]);
 
   const updateMeasurement = useCallback(async (updatedMeasurement: Partial<Measurement> & { id: string }) => {
+    const db = getDb();
     const measurementRef = doc(db, "measurements", updatedMeasurement.id);
     await updateDoc(measurementRef, updatedMeasurement);
   }, []);
 
   const updateMeasurementStatus = useCallback(async (measurementId: string, status: MeasurementStatus) => {
+    const db = getDb();
     const measurementRef = doc(db, "measurements", measurementId);
     await updateDoc(measurementRef, { status });
   }, []);
 
   const deleteClient = useCallback(async (clientId: string) => {
+    const db = getDb();
     // First, delete all measurements associated with the client
     const q = query(collection(db, "measurements"), where("clientId", "==", clientId));
     const querySnapshot = await getDocs(q);
@@ -118,6 +126,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   }, []);
 
   const deleteMeasurement = useCallback(async (measurementId: string) => {
+    const db = getDb();
     await deleteDoc(doc(db, "measurements", measurementId));
   }, []);
 
