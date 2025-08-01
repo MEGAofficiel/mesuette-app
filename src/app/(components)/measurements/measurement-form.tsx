@@ -224,7 +224,7 @@ export function MeasurementForm({
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Sélectionner un sexe" />
-                        </SelectTrigger>
+                        </Trigger>
                       </FormControl>
                       <SelectContent>
                         {GENDERS.map(g => (
