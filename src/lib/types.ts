@@ -1,4 +1,5 @@
 
+import type { Timestamp } from 'firebase/firestore';
 import type { GarmentType, Gender } from './constants';
 
 export type MeasurementStatus = 'inProgress' | 'completed' | 'delivered';
@@ -9,7 +10,7 @@ export interface Client {
   email?: string;
   phone?: string;
   notes?: string;
-  createdAt: string; // ISO date string
+  createdAt: string | Timestamp; // Can be ISO string from form or Timestamp from Firestore
 }
 
 export interface Measurement {
@@ -18,7 +19,7 @@ export interface Measurement {
   date: string; // ISO date string
   garmentType: GarmentType;
   gender: Gender;
-  measurements: Record<string, number | string>; // Store as string initially from form, convert to number where applicable
+  measurements: Record<string, number>;
   notes?: string;
-  status: MeasurementStatus; // Nouveau champ pour le statut
+  status: MeasurementStatus;
 }

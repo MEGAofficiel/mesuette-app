@@ -7,6 +7,16 @@ import { Button } from '@/components/ui/button';
 import { User, Mail, Phone } from 'lucide-react';
 import { format } from 'date-fns';
 import { APP_LOCALE } from '@/lib/constants';
+import type { Timestamp } from 'firebase/firestore';
+
+
+// Helper to convert Firestore Timestamp to Date
+const toDate = (timestamp: string | Timestamp): Date => {
+  if (typeof timestamp === 'string') {
+    return new Date(timestamp);
+  }
+  return timestamp.toDate();
+};
 
 interface ClientListItemProps {
   client: Client;
@@ -21,7 +31,7 @@ export function ClientListItem({ client }: ClientListItemProps) {
           {client.name}
         </CardTitle>
         <CardDescription>
-          Ajouté le {format(new Date(client.createdAt), "PPP", { locale: APP_LOCALE })}
+          Ajouté le {format(toDate(client.createdAt), "PPP", { locale: APP_LOCALE })}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-2">

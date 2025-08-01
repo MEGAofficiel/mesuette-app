@@ -2,15 +2,23 @@
 "use client";
 import type { Client } from '@/lib/types';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Mail, Phone, Edit, StickyNote, CalendarDays } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+import { Mail, Phone, StickyNote } from 'lucide-react';
 import { format } from 'date-fns';
 import { APP_LOCALE } from '@/lib/constants';
+import type { Timestamp } from 'firebase/firestore';
 
 interface ClientDetailsCardProps {
   client: Client;
 }
+
+// Helper to convert Firestore Timestamp to Date
+const toDate = (timestamp: string | Timestamp): Date => {
+  if (typeof timestamp === 'string') {
+    return new Date(timestamp);
+  }
+  return timestamp.toDate();
+};
+
 
 export function ClientDetailsCard({ client }: ClientDetailsCardProps) {
   return (
@@ -19,7 +27,7 @@ export function ClientDetailsCard({ client }: ClientDetailsCardProps) {
         <div>
           <CardTitle className="text-2xl">{client.name}</CardTitle>
           <CardDescription>
-             Client depuis le {format(new Date(client.createdAt), "PPP", { locale: APP_LOCALE })}
+             Client depuis le {format(toDate(client.createdAt), "PPP", { locale: APP_LOCALE })}
           </CardDescription>
         </div>
         {/* <Button variant="outline" size="sm" asChild>

@@ -9,7 +9,6 @@ import type { Measurement } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, UserX, FileQuestion } from 'lucide-react';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
 
 export default function EditMeasurementPage() {
   const router = useRouter();
@@ -19,7 +18,6 @@ export default function EditMeasurementPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [initialFormValues, setInitialFormValues] = useState<Partial<MeasurementFormValues> | undefined>(undefined);
   const [isLoading, setIsLoading] = useState(true);
-  const [originalMeasurement, setOriginalMeasurement] = useState<Measurement | null | undefined>(undefined);
 
   const clientId = typeof params.id === 'string' ? params.id : '';
   const measurementId = typeof params.measurementId === 'string' ? params.measurementId : '';
@@ -27,28 +25,20 @@ export default function EditMeasurementPage() {
   const client = getClientById(clientId);
   
   const loadMeasurementData = useCallback(() => {
-    if (measurementId) {
-      const measurementData = getMeasurementById(measurementId);
-      if (measurementData) {
-        setOriginalMeasurement(measurementData); // Sauvegarde de la mesure originale pour le statut
-        setInitialFormValues(measurementToFormValues(measurementData));
-      } else {
-        setInitialFormValues(undefined); 
-        toast({
-          title: "Mesure non trouvée",
-          description: "Impossible de charger les données de la mesure pour modification.",
-          variant: "destructive",
-        });
-      }
+    const measurementData = getMeasurementById(measurementId);
+    if (measurementData) {
+      setInitialFormValues(measurementToFormValues(measurementData));
+    } else {
+      setInitialFormValues(undefined); 
+      // Toast might fire too early if data is just loading, so we rely on the return block
     }
     setIsLoading(false);
-  }, [measurementId, getMeasurementById, toast]);
+  }, [measurementId, getMeasurementById]);
 
   useEffect(() => {
     setIsLoading(true);
     loadMeasurementData();
   }, [loadMeasurementData]);
-
 
   if (isLoading) {
     return <div className="flex justify-center items-center h-64">Chargement des données de mesure...</div>;
@@ -84,11 +74,7 @@ export default function EditMeasurementPage() {
     );
   }
 
-  const handleSubmit = (data: MeasurementFormValues) => {
-    if (!originalMeasurement) {
-        toast({ title: "Erreur", description: "Données originales de mesure non trouvées.", variant: "destructive"});
-        return;
-    }
+  const handleSubmit = async (data: MeasurementFormValues) => {
     setIsSubmitting(true);
     try {
       const processedMeasurements: Record<string, number> = {};
@@ -98,18 +84,17 @@ export default function EditMeasurementPage() {
         }
       }
 
-      const updatedMeasurementData: Measurement = {
+      const updatedMeasurementData: Partial<Measurement> & { id: string } = {
         id: measurementId,
-        clientId: clientId,
         date: data.date.toISOString(),
         garmentType: data.garmentType,
         gender: data.gender,
         measurements: processedMeasurements,
         notes: data.notes,
-        status: originalMeasurement.status, // Préserver le statut original
+        // status is not updated here, it's handled separately
       };
       
-      updateMeasurement(updatedMeasurementData);
+      await updateMeasurement(updatedMeasurementData);
       toast({
         title: "Mesure Modifiée",
         description: `La mesure ${data.garmentType} pour ${client.name} a été modifiée avec succès.`,

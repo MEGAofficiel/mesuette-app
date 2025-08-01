@@ -13,10 +13,10 @@ export default function AddClientPage() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (data: Omit<Client, 'id' | 'createdAt'>) => {
+  const handleSubmit = async (data: Omit<Client, 'id' | 'createdAt'>) => {
     setIsSubmitting(true);
     try {
-      const newClient = addClient(data);
+      const newClient = await addClient(data);
       toast({
         title: "Client Ajouté",
         description: `${newClient.name} a été ajouté avec succès.`,

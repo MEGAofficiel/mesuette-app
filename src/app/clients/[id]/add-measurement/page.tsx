@@ -2,7 +2,7 @@
 "use client";
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { MeasurementForm } from '@/app/(components)/measurements/measurement-form';
+import { MeasurementForm, type MeasurementFormValues } from '@/app/(components)/measurements/measurement-form';
 import { useAppContext } from '@/context/app-context';
 import { useToast } from '@/hooks/use-toast';
 import type { Measurement } from '@/lib/types';
@@ -35,15 +35,31 @@ export default function AddMeasurementPage() {
     );
   }
 
-  const handleSubmit = (data: Omit<Measurement, 'id' | 'clientId'> & { date: string }) => {
+  const handleSubmit = async (data: MeasurementFormValues) => {
     setIsSubmitting(true);
     try {
+      // Convert string values from form back to numbers where appropriate
+      const processedMeasurements: Record<string, number> = {};
+      for (const [key, value] of Object.entries(data.measurements)) {
+        if (value && String(value).trim() !== "") {
+          const num = parseFloat(String(value));
+          if (!isNaN(num)) {
+            processedMeasurements[key] = num;
+          }
+        }
+      }
+
       const measurementData = {
-        ...data,
         clientId: client.id,
+        date: data.date.toISOString(),
+        garmentType: data.garmentType,
+        gender: data.gender,
+        notes: data.notes || "",
+        measurements: processedMeasurements,
       };
-      // @ts-ignore // MeasurementForm already processes date to string
-      addMeasurement(measurementData);
+      
+      await addMeasurement(measurementData);
+      
       toast({
         title: "Mesure Ajoutée",
         description: `Nouvelle mesure ${data.garmentType} pour ${client.name} ajoutée avec succès.`,
@@ -68,7 +84,7 @@ export default function AddMeasurementPage() {
           <ArrowLeft className="mr-2 h-4 w-4" /> Retour au Client
         </Button>
       </div>
-      <MeasurementForm clientId={client.id} onSubmit={handleSubmit} isSubmitting={isSubmitting} />
+      <MeasurementForm onSubmit={handleSubmit} isSubmitting={isSubmitting} />
     </div>
   );
 }
