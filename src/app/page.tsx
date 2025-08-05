@@ -17,6 +17,7 @@ export default function HomePage() {
             height={120}
             className="mx-auto mb-6 rounded-full shadow-lg"
             data-ai-hint="tailor sewing machine logo"
+            priority
           />
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 tracking-tight">
             Bienvenue sur Mesuette
