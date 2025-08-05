@@ -11,12 +11,12 @@ export default function HomePage() {
       <main className="max-w-3xl mx-auto">
         <div className="mb-8">
           <Image 
-            src="https://storage.googleapis.com/project-os-frontend/codellama-v1/images/mesuette/4252a160-c328-4f10-ad27-9c988b4ef84c.png" 
+            src="https://storage.googleapis.com/project-os-frontend/codellama-v1/images/mesuette/6c207928-84a1-42d3-a5c6-7a72d6e3f01c.png" 
             alt="Mesuette App Logo" 
             width={120} 
             height={120}
             className="mx-auto mb-6 rounded-full shadow-lg"
-            data-ai-hint="hand measuring person tailor"
+            data-ai-hint="tailor sewing machine logo"
           />
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 tracking-tight">
             Bienvenue sur Mesuette
